@@ -1,0 +1,9 @@
+# -*- coding: utf-8 -*-
+BOT_NAME = 'tenement'
+
+SPIDER_MODULES = ['tenement.spiders']
+NEWSPIDER_MODULE = 'tenement.spiders'
+# Crawl responsibly by identifying yourself (and your website) on the user-agent
+# USER_AGENT = 'tenement (+http://www.yourdomain.com)'
+# ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
