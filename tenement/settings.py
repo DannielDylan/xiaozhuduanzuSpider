@@ -13,6 +13,10 @@ BOT_NAME = 'tenement'
 
 SPIDER_MODULES = ['tenement.spiders']
 NEWSPIDER_MODULE = 'tenement.spiders'
+REDIS_HOST='localhost'
+REDIS_PORT=6379
+REDIS_PASSWORD=None
+REDIS_START_URLS_AS_SET=True
 # LOG_FILE='xiaozhulog.txt'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'tenement (+http://www.yourdomain.com)'

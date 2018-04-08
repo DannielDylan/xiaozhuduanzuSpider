@@ -5,11 +5,14 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 import logging
-import random,base64
+import random, base64
 
-from scrapy import signals
-from scrapy.http import request
+# from proxies import get_proxy
+from proxy_ip import Proxies
+import time
+
 import requests
+
 
 # 付费代理阿布云:
 # url = 'http://httpbin.org/get'
@@ -19,8 +22,8 @@ import requests
 # proxy_port = '9020'
 #
 # # 代理隧道验证信息
-# proxy_user = 'H01234567890123D'
-# proxy_pass = '0123456789012345'
+# proxy_user = '.....'
+# proxy_pass = '.....'
 #
 # proxy_meta = 'http://%(user)s:%(pass)s@%(host)s:%(port)s' % {
 #     'host': proxy_host,
@@ -35,22 +38,8 @@ import requests
 # response = requests.get(url, proxies=proxies)
 # print(response.status_code)
 # print(response.text)
+from scrapy import signals
 
-# 免费代理 (实在是多,不胜枚举)
-proxies = [
-    "http://121.234.13.28:23823",
-    "http://114.230.41.88:3128",
-    # "https": "https://223.241.78.162:18118",
-    "http://183.159.95.165:18118",
-    # "https": "https://115.213.146.25:39619",
-    "http://183.159.85.57:18118",
-    "http://115.215.56.108:43136",
-    "http://60.177.229.113:18118",
-    "http://222.246.252.52:3128",
-]
-# proxies_ip = random.choice(proxies)
-#  IPProxies= {'http': proxies_ip}
-IPProxies=random.choice(proxies)
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) "
     "Chrome/22.0.1207.1 Safari/537.1",
@@ -144,15 +133,55 @@ class IPProxiesMiddleware(object):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-    def process_request(self, request, spider):
-        request.meta['proxy'] = IPProxies
+    # def get_random_proxy(self):
+    #     while 1:
+    #         with open(r"proxies.txt", 'r') as f:
+    #             proxies = f.readlines()
+    #             if proxies:
+    #                 break
+    #             else:
+    #                 time.sleep(1)
+    #     proxy = random.choice(proxies).strip()
+    #     return proxy
 
-       # '''
-       # 这里用的是免费代理,不用用户名和密码,如果有用户名和密码还要加入以下代码
-       # proxy_user_pass="USERNAME:PASSWORD"
-       # encode_user_pass=base64.encodestring(proxy_user_pass)
-       # request.headers['Proxy-Authorization']='Basic'+encode_user_pass
-       # '''
+    def process_request(self, request, spider):
+        # proxy = self.get_random_proxy()
+        proxies=[
+            'http://177.72.56.155:3128',
+            'http://185.88.255.2:8080',
+            'http://103.210.56.38:8082',
+            'http://106.14.9.131:9000',
+            'http://212.41.231.213:3128'
+
+        ]
+        # proxy=get_proxy()
+
+        proxy = random.choice(proxies)
+        print('选出的代理是:%s'%(proxy))
+        request.meta['proxy'] =proxy
+
+
+    # def process_response(self,request,response):
+    #     """
+    #     如果返回的response状态不是200,就重新生成当前的request对象
+    #     :param request:
+    #     :param response:
+    #     :return:
+    #     """
+    #     if response.status!=200:
+    #         proxy=self.get_random_proxy()
+    #         print('this is response ip:'+proxy)
+    #         request.meta['[proxy']=proxy
+    #         return request
+    #     return response
+
+
+# '''
+# 这里用的是免费代理,不用用户名和密码,如果有用户名和密码还要加入以下代码
+# proxy_user_pass="USERNAME:PASSWORD"
+# encode_user_pass=base64.encodestring(proxy_user_pass)
+# request.headers['Proxy-Authorization']='Basic'+encode_user_pass
+# '''
 
 
 class RandomUserAgent(object):

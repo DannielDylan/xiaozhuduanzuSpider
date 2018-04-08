@@ -20,6 +20,7 @@ class TenementItem(scrapy.Item):
     desc=scrapy.Field()
     #图片
     images=scrapy.Field()
+    image_urls=scrapy.Field()
     #优品
     superior_products=scrapy.Field()
     #速订

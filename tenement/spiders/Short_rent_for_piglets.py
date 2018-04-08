@@ -30,11 +30,13 @@ class ShortRentForPigletsSpider(scrapy.Spider):
     custom_settings = {
         'ITEM_PIPELINES': {
             'tenement.pipelines.TenementPipeline': 300,
+            'tenement.pipelines.XiaoZhuPipeline': 345,
         },
         'DOWNLOADER_MIDDLEWARES': {
             'tenement.middlewares.TenementSpiderMiddleware': 543,
             # 'tenement.middlewares.IPProxiesMiddleware': 300,
             'tenement.middlewares.RandomUserAgent': 400,
+
             # 使用scrapy_crawlera 就可以将之前设置过的代理ip中间件注释掉了,加入了crawlera的代理
             # 'scrapy_crawlera.CrawleraMiddleware': 600
         },
@@ -60,6 +62,11 @@ class ShortRentForPigletsSpider(scrapy.Spider):
         # 'LOG_LEVEL': 'DEBUG', 设置log级别
         # 'LOG_LEVEL': 'INFO',
         'LOG_STDOUT': True,
+        'IMAGES_STORE':'D:\\download', #图片保存路径
+        'IMAGES_EXPIRES':90, #设置的项目保存的最长时间
+        # 设置的图片尺寸大小
+        'IMAGES_MIN_HEIGHT':100,
+        'IMAGES_MIN_WIDTH':100,
 
     }
 
@@ -74,7 +81,7 @@ class ShortRentForPigletsSpider(scrapy.Spider):
             item['price'] = li.xpath('./div[2]/span[1]/i/text()').extract_first()
             item['desc'] = li.xpath('./div[2]/div/em/text()').extract_first().strip()
             item['address'] = li.xpath('./a/@href').extract_first()
-            item['images'] = li.xpath('./a/img/@lazy_src').extract_first()
+            item['image_urls'] = li.xpath('./a/img/@lazy_src').extract_first()
 
             item['superior_products'] = li.select('./div[2]/div/p/span[@class="youpin_ico"]/@title').extract()
             item['superior_products'] = item['superior_products'][0] if len(item['superior_products']) > 0 else None
@@ -99,4 +106,5 @@ class ShortRentForPigletsSpider(scrapy.Spider):
                 next_url,
                 callback=self.parse, dont_filter=True
             )
+
 
